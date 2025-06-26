@@ -3,6 +3,6 @@ import { User } from "../../generated/prisma";
 
 declare module 'express' {
     export interface Request {
-        user?: User
+        user?: any
     }
 }

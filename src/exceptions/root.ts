@@ -13,11 +13,12 @@ export class HTTPException extends Error {
     }
 }
 
-export enum ErrorCodes{
+export enum ErrorCodes {
     USER_NOT_FOUND = 1001,
     USER_ALREADY_EXIST = 1002,
     INCORRECT_PASWORD = 1003,
     UNPROCESSABLE_ENTITY = 20001,
     INTERNAL_EXCEPTION = 3001,
     UNAUTHORIZED = 404,
+    ADDRESS_NOT_FOUND = 1004
 }
