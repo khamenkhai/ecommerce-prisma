@@ -13,8 +13,8 @@ cartRoutes.use(authMiddleware);
 
 // Create a cart item
 cartRoutes.post('/', addItemToCart);
-cartRoutes.get('/', getCart);
+cartRoutes.get('/:id', getCart);
 cartRoutes.delete('/:id', deleteItemFromCart);
-cartRoutes.get('/:id', changeQuantity);
+cartRoutes.put('/:id', changeQuantity);
 
 export default cartRoutes;

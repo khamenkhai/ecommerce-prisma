@@ -19,31 +19,44 @@ enum Role {
   ADMIN
 }
 
+enum OrderEventStatus {
+  PENDING
+  ACCCEPTED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
-  name      String?
-  password  String
-  role      Role       @default(USER)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  Address   Address[]
-  CartItem  CartItem[]
+  id                       Int        @id @default(autoincrement())
+  email                    String     @unique
+  name                     String?
+  password                 String
+  role                     Role       @default(USER)
+  defaultShippingAddressId Int? // FK column
+  defaultShippingAddress   Address?   @relation("UserDefaultShippingAddress", fields: [defaultShippingAddressId], references: [id])
+  addresses                Address[]
+  cartItems                CartItem[]
+  orders                   Order[]
+  createdAt                DateTime   @default(now())
+  updatedAt                DateTime   @updatedAt
 
   @@map("users")
 }
 
 model Address {
-  id        Int      @id @default(autoincrement())
-  lineOne   String
-  lineTwo   String?
-  city      String
-  country   String
-  pinCode   String
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                      Int      @id @default(autoincrement())
+  lineOne                 String
+  lineTwo                 String?
+  city                    String
+  country                 String
+  pinCode                 String
+  formattedAddress        String?
+  userId                  Int
+  user                    User     @relation(fields: [userId], references: [id])
+  defaultShippingForUsers User[]   @relation("UserDefaultShippingAddress") // reverse relation
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   @@map("addresses")
 }
@@ -62,14 +75,53 @@ model CartItem {
 }
 
 model Product {
-  id          Int        @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   name        String
   description String
   price       Decimal
   tags        String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  CartItem    CartItem[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  cartItems   CartItem[]
+  orders      OrderProduct[]
 
   @@map("products")
+}
+
+model Order {
+  id        Int            @id @default(autoincrement())
+  userId    Int
+  user      User           @relation(fields: [userId], references: [id])
+  netAmount Decimal
+  address   String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  products  OrderProduct[]
+  events    OrderEvent[]
+
+  @@map("orders")
+}
+
+model OrderProduct {
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  order     Order    @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_products")
+}
+
+model OrderEvent {
+  id        Int              @id @default(autoincrement())
+  orderId   Int
+  order     Order            @relation(fields: [orderId], references: [id])
+  status    OrderEventStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@map("order_events")
 }

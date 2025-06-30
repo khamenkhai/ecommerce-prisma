@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getProduct, getProducts, createProduct, updateProduct, deleteProduct } from '../controllers/product-controller';
+import { getProduct, getProducts, createProduct, updateProduct, deleteProduct, createManyProducts } from '../controllers/product-controller';
 import authMiddleware from '../middlewares/auth';
 import adminMiddleware from '../middlewares/admin';
 
@@ -11,6 +11,7 @@ const productRoutes = Router();
 productRoutes.get('', getProducts);
 productRoutes.get('/:id', getProduct);
 productRoutes.post('', [authMiddleware, adminMiddleware], createProduct);
+productRoutes.post('/many', authMiddleware, createManyProducts);
 productRoutes.put('/:id', updateProduct);
 productRoutes.delete('/:id', deleteProduct);
 

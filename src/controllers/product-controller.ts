@@ -46,6 +46,31 @@ export const getProduct = async (req: Request, res: Response, next: NextFunction
     }
 };
 
+// Create multiple products at once
+export const createManyProducts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const products = req.body.products;
+
+        if (!Array.isArray(products) || products.length === 0) {
+             res.status(400).json({ error: "Products array is required and cannot be empty." });
+        }
+
+        await prismaClient.product.createMany({
+            data: products,
+            skipDuplicates: true // Optional: skips entries with duplicate unique fields
+        });
+
+        res.json({
+            status: true,
+            message: "Products created successfully!",
+        });
+    } catch (e: any) {
+        console.error("Bulk create error:", e);
+         next(new UnprocessableEntity(e?.issues || e.message, 'Unprocessable', ErrorCodes.UNPROCESSABLE_ENTITY));
+    }
+};
+
+
 // Create a new product
 export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
 

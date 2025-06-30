@@ -1,19 +1,20 @@
 import { z } from 'zod';
 
 export const SignupSchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
-    password: z.string().min(6),
+  name: z.string(),
+  email: z.string().email(),
+  password: z.string().min(6),
 });
 
 
 export const AddressSchema = z.object({
-    lineOne: z.string(),
-    lineTwo: z.string().nullable(),        // Optional in Prisma (String?), use nullable
-    pinCode: z.string().length(6),         // Use "pinCode" to match Prisma
-    country: z.string(),
-    city: z.string(),
-    userId: z.number(),                     // Int in Prisma → number in Zod
+  lineOne: z.string(),
+  lineTwo: z.string().nullable(),        // Optional in Prisma (String?), use nullable
+  pinCode: z.string().length(6),         // Use "pinCode" to match Prisma
+  country: z.string(),
+  city: z.string(),
+  userId: z.number(),                     // Int in Prisma → number in Zod
+  formattedAddress: z.string().optional()
 });
 
 export const CartItemSchema = z.object({

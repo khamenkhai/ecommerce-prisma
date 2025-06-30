@@ -24,9 +24,14 @@ export const prismaClient = new PrismaClient({
                 return query(args);
             }
         }
-    }
+    },
+    // result : {
+    //     address : {
+    //         formattedAddress
+    //     }
+    // }
 });
 
 app.listen(PORT, () => {
     console.log(`App is working in : ${PORT}`);
-})
+});

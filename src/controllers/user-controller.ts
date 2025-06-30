@@ -32,7 +32,7 @@ export const addAddress = async (req: Request, res: Response, next: NextFunction
                 city: validatedData.city,
                 country: validatedData.country,
                 pinCode: validatedData.pinCode,
-                userId: user.id // Only set userId, not user object
+                userId: user.id
             }
         });
 
